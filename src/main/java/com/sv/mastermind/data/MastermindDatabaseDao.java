@@ -3,14 +3,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package com.sv.mastermind.model;
+package com.sv.mastermind.data;
 
 import com.sv.mastermind.data.IMastermindDao;
+import com.sv.mastermind.model.Game;
+import com.sv.mastermind.model.Round;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Repository;
 
 /**
  *
@@ -19,19 +26,20 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
  * date:
  * purpose:
  */
+@Repository
 public class MastermindDatabaseDao implements IMastermindDao {
     
     private final JdbcTemplate jdbcTemplate;
     
+    @Autowired
     public MastermindDatabaseDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
     
-
     @Override
     public Game newGame(Game game) {
 
-        final String sql = "INSERT INTO mastermind(gameId, board) VALUES(?,?);";
+        final String sql = "INSERT INTO game(board) VALUES(?);";
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update((Connection conn) -> {
@@ -39,8 +47,7 @@ public class MastermindDatabaseDao implements IMastermindDao {
                     sql,
                     PreparedStatement.RETURN_GENERATED_KEYS);
             
-            statement.setInt(1, game.getGameId());
-            statement.setString(2, game.getBoard());
+            statement.setString(1, game.getBoard());
             return statement;
         }, keyHolder);
         
@@ -68,5 +75,17 @@ public class MastermindDatabaseDao implements IMastermindDao {
     public List<Round> gameRounds(int gameId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    private static final class MastermindMapper implements RowMapper<Game> {
+        
+        @Override
+        public Game mapRow(ResultSet rs, int index) throws SQLException {
+            Game g = new Game();
+            g.setGameId(rs.getInt("gameId"));
+            g.setBoard(rs.getString("board"));
+            g.setIsComplete(rs.getBoolean("isComplete"));
+            return g;
+        }
+    }
+ 
 }

@@ -3,10 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package com.sv.mastermind;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+package com.sv.mastermind.service;
 
 /**
  *
@@ -15,9 +12,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * date:
  * purpose:
  */
-@SpringBootApplication
-public class App {
-    public static void main(String[] args) {
-        SpringApplication.run(App.class, args);
-    }
+public class MastermindServiceLayer {
+
 }

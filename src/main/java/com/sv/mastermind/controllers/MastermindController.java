@@ -31,7 +31,7 @@ public class MastermindController {
         this.dao = dao;
     }
     
-    @PostMapping
+    @PostMapping("/begin")
     @ResponseStatus(HttpStatus.CREATED)
     public Game createGame(@RequestBody Game game) {
         return dao.newGame(game);

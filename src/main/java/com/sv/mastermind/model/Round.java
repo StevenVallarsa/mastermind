@@ -18,9 +18,9 @@ public class Round {
 
     private int roundId;
     private String guess;
-    private LocalDateTime dateAndTime;
-    private String result;
-    private int game;
+    private String exactMatch;
+    private String partialMatch;
+    private int gameId;
 
     public int getRoundId() {
         return roundId;
@@ -38,28 +38,28 @@ public class Round {
         this.guess = guess;
     }
 
-    public LocalDateTime getDateAndTime() {
-        return dateAndTime;
-    }
-    
-    public void setDateAndTime(LocalDateTime dateAndTime) {
-        this.dateAndTime = dateAndTime;
+    public String getExactMatch() {
+        return exactMatch;
     }
 
-    public String getResult() {
-        return result;
+    public void setExactMatch(String exactMatch) {
+        this.exactMatch = exactMatch;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public String getPartialMatch() {
+        return partialMatch;
     }
 
-    public int getGame() {
-        return game;
+    public void setPartialMatch(String partialMatch) {
+        this.partialMatch = partialMatch;
     }
 
-    public void setGame(int game) {
-        this.game = game;
+    public int getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
     }
     
     

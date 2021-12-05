@@ -5,7 +5,6 @@
 
 package com.sv.mastermind.controllers;
 
-import com.sv.mastermind.data.IMastermindDao;
 import com.sv.mastermind.model.Game;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import com.sv.mastermind.data.MastermindDao;
+import com.sv.mastermind.model.Round;
+import com.sv.mastermind.service.MastermindServiceLayer;
+import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  *
@@ -25,15 +31,54 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/mastermind")
 public class MastermindController {
 
-    private final IMastermindDao dao;
+//    private final MastermindDao dao;
     
-    public MastermindController(IMastermindDao dao) {
-        this.dao = dao;
+//    public MastermindController(MastermindDao dao) {
+//        this.dao = dao;
+//    }
+    
+    private MastermindServiceLayer service;
+
+    public MastermindController(MastermindServiceLayer service) {
+        this.service = service;
     }
     
     @PostMapping("/begin")
     @ResponseStatus(HttpStatus.CREATED)
-    public Game createGame(@RequestBody Game game) {
-        return dao.newGame(game);
+    public Game createGame() {
+        return service.createGame();
+    }
+    
+    @PostMapping("/guess")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Round playRound(@RequestBody Round round) {
+        return service.playRound(round);
+    }
+    
+    @GetMapping("/game")
+    public List<Game> getGamesList() {
+        return service.getGamesList();
+    }
+    
+    @GetMapping("/game/{gameId}")
+    public ResponseEntity<Game> getGame(@PathVariable int gameId) {
+        
+        Game game = service.getSpecificGame(gameId);
+        if (game == null) {
+            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+        }
+        if (game.getIsComplete() == false) {
+            game.setBoard("XXXX");
+        }
+        return ResponseEntity.ok(game);
+    }
+    
+    @GetMapping("/rounds/{gameId}")
+    public ResponseEntity<List<Round>> getRounds(@PathVariable int gameId) {
+        
+        List<Round> rounds = service.getRounds(gameId);
+
+        return ResponseEntity.ok(rounds);
+        
     }
 }

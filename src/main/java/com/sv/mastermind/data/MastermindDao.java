@@ -12,10 +12,11 @@ import java.util.List;
  *
  * @author StevePro
  */
-public interface IMastermindDao {
+public interface MastermindDao {
     Game newGame(Game game);
-    Round guess(String currentGuess);
-    List<Game> games();
+    Round guess(Round round);
+    List<Game> getAllGames();
     Game game(int gameId);
+    void endGame(int gameId);
     List<Round> gameRounds(int gameId);
 }

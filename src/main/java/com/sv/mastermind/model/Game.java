@@ -34,7 +34,7 @@ public class Game {
         this.board = board;
     }
 
-    public boolean isIsComplete() {
+    public boolean getIsComplete() {
         return isComplete;
     }
 

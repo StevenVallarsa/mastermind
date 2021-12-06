@@ -18,8 +18,7 @@ public class Round {
 
     private int roundId;
     private String guess;
-    private String exactMatch;
-    private String partialMatch;
+    private String matches;
     private int gameId;
 
     public int getRoundId() {
@@ -38,20 +37,12 @@ public class Round {
         this.guess = guess;
     }
 
-    public String getExactMatch() {
-        return exactMatch;
+    public String getMatches() {
+        return matches;
     }
 
-    public void setExactMatch(String exactMatch) {
-        this.exactMatch = exactMatch;
-    }
-
-    public String getPartialMatch() {
-        return partialMatch;
-    }
-
-    public void setPartialMatch(String partialMatch) {
-        this.partialMatch = partialMatch;
+    public void setMatches(String matches) {
+        this.matches = matches;
     }
 
     public int getGameId() {

@@ -96,8 +96,8 @@ public class MastermindServiceLayerImpl implements MastermindServiceLayer {
             }
         }
         
-        round.setExactMatch(String.valueOf(exactMatches));
-        round.setPartialMatch(String.valueOf(partialMatches));
+        round.setMatches("e:" + exactMatches + ":p" + partialMatches);
+        dao.guess(round);
         
         if (exactMatches == 4) {
             dao.endGame(gameId);
@@ -106,7 +106,6 @@ public class MastermindServiceLayerImpl implements MastermindServiceLayer {
 
         }
         
-        dao.guess(round);
         return round;
         
     }
@@ -143,6 +142,9 @@ public class MastermindServiceLayerImpl implements MastermindServiceLayer {
             deadGame.setBoard("NOT A VALID GAME NUMBER");
             deadGame.setIsComplete(true);
             return deadGame;
+        }
+        if (selectedGame.getIsComplete()) {
+            selectedGame.setBoard("GAME BOARD HIDDEN UNTIL GAME IS WON");
         }
         return selectedGame;
     }

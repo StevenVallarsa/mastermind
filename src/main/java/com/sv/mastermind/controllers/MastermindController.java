@@ -67,9 +67,9 @@ public class MastermindController {
         if (game == null) {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
-        if (game.getIsComplete() == false) {
-            game.setBoard("XXXX");
-        }
+//        if (game.getIsComplete() == false) {
+//            game.setBoard("XXXX");
+//        }
         return ResponseEntity.ok(game);
     }
     

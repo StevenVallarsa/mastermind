@@ -53,7 +53,7 @@ public class MastermindDatabaseDao implements MastermindDao {
 
     @Override
     public Round guess(Round round) {
-        final String sql = "INSERT INTO round(guess, exactMatch, partialMatch, gameId) VALUES(?, ?, ?, ?);";
+        final String sql = "INSERT INTO round(guess, matches, gameId) VALUES(?, ?, ?);";
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update((Connection conn) -> {
@@ -62,9 +62,8 @@ public class MastermindDatabaseDao implements MastermindDao {
                     PreparedStatement.RETURN_GENERATED_KEYS);
 
             statement.setString(1, round.getGuess());
-            statement.setString(2, round.getExactMatch());
-            statement.setString(3, round.getPartialMatch());
-            statement.setInt(4, round.getGameId());
+            statement.setString(2, round.getMatches());
+            statement.setInt(3, round.getGameId());
             return statement;
         }, keyHolder);
 
@@ -110,7 +109,7 @@ public class MastermindDatabaseDao implements MastermindDao {
     @Override
     public List<Round> gameRounds(int gameId) {
 
-        final String sql = "SELECT roundId, guess, partialMatch, exactMatch, gameId FROM round WHERE gameId = ?";
+        final String sql = "SELECT roundId, guess, matches, gameId FROM round WHERE gameId = ?";
         return jdbcTemplate.query(sql, new RoundMapper(), gameId);
 
     }
@@ -134,8 +133,7 @@ public class MastermindDatabaseDao implements MastermindDao {
             Round r = new Round();
             r.setRoundId(rs.getInt("roundId"));
             r.setGuess(rs.getString("guess"));
-            r.setPartialMatch(rs.getString("partialMatch"));
-            r.setExactMatch(rs.getString("exactMatch"));
+            r.setMatches(rs.getString("matches"));
             r.setGameId(rs.getInt("gameId"));
             return r;
         }

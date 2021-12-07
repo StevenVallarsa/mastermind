@@ -140,10 +140,10 @@ public class MastermindServiceLayerImpl implements MastermindServiceLayer {
             deadGame = new Game();
             deadGame.setGameId(gameId);
             deadGame.setBoard("NOT A VALID GAME NUMBER");
-            deadGame.setIsComplete(true);
+            deadGame.setIsComplete(false);
             return deadGame;
         }
-        if (selectedGame.getIsComplete()) {
+        if (!selectedGame.getIsComplete()) {
             selectedGame.setBoard("GAME BOARD HIDDEN UNTIL GAME IS WON");
         }
         return selectedGame;

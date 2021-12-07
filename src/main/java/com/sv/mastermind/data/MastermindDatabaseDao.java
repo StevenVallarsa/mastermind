@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -82,20 +83,17 @@ public class MastermindDatabaseDao implements MastermindDao {
 
     @Override
     public Game game(int gameId) {
-        List<Game> gameList = this.getAllGames();
+        final String sql = "SELECT gameId, board, isComplete FROM game WHERE gameId = ?";
+        Game returnedGame = null;
         
-        for (Game game : gameList) {
-            if (game.getGameId() == gameId) {
-                return game;
-            }
+        try {
+             returnedGame = jdbcTemplate.queryForObject(sql, new GameMapper(), gameId);
+        } catch (DataAccessException e) {
+            System.out.println("That wasn't a valid game number. Please try again.");
+            return null;
         }
         
-        return null;
-        
-//        final String sql = "SELECT gameId, board, isComplete FROM game WHERE gameId = ?";
-//        Game abc = jdbcTemplate.queryForObject(sql, new GameMapper(), gameId);
-//
-//        return abc;
+        return returnedGame;
     }
 
     @Override

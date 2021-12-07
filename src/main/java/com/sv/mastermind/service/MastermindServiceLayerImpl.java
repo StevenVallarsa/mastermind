@@ -8,6 +8,7 @@ package com.sv.mastermind.service;
 import com.sv.mastermind.data.MastermindDao;
 import com.sv.mastermind.model.Game;
 import com.sv.mastermind.model.Round;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,8 @@ public class MastermindServiceLayerImpl implements MastermindServiceLayer {
     
     @Override
     public Game createGame() {
+        
+        // create four unique random numbers as the game board
         String board = "";
         while (board.length() < 4) {
             int randomNumber = rnd.nextInt(10);
@@ -51,6 +54,8 @@ public class MastermindServiceLayerImpl implements MastermindServiceLayer {
         Game game = new Game();
         game.setBoard(board);
         dao.newGame(game);
+        
+        game.setBoard("BOARD GAME HIDDEN UNTIL GAME IS WON");
         
         return game;
     }

@@ -5,6 +5,8 @@
 
 package com.sv.mastermind.model;
 
+import java.util.Objects;
+
 /**
  *
  * @author: Steven Vallarsa
@@ -13,6 +15,39 @@ package com.sv.mastermind.model;
  * purpose:
  */
 public class Game {
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + this.gameId;
+        hash = 97 * hash + Objects.hashCode(this.board);
+        hash = 97 * hash + (this.isComplete ? 1 : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Game other = (Game) obj;
+        if (this.gameId != other.gameId) {
+            return false;
+        }
+        if (this.isComplete != other.isComplete) {
+            return false;
+        }
+        if (!Objects.equals(this.board, other.board)) {
+            return false;
+        }
+        return true;
+    }
 
     private int gameId;
     private String board;

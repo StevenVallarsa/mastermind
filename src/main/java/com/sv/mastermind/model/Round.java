@@ -58,6 +58,7 @@ public class Round {
     private String guess;
     private String matches;
     private int gameId;
+    private LocalDateTime timeOfPlay;
 
     public int getRoundId() {
         return roundId;
@@ -90,6 +91,16 @@ public class Round {
     public void setGameId(int gameId) {
         this.gameId = gameId;
     }
+
+    public LocalDateTime getTimeOfPlay() {
+        return timeOfPlay;
+    }
+
+    public void setTimeOfPlay(LocalDateTime timeOfPlay) {
+        this.timeOfPlay = timeOfPlay;
+    }
+    
+    
     
     
 }

@@ -17,6 +17,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
+import java.sql.Timestamp;  
+
 
 /**
  *
@@ -54,7 +56,7 @@ public class MastermindDatabaseDao implements MastermindDao {
 
     @Override
     public Round guess(Round round) {
-        final String sql = "INSERT INTO round(guess, matches, gameId) VALUES(?, ?, ?);";
+        final String sql = "INSERT INTO round(guess, matches, gameId, timeOfPlay) VALUES(?, ?, ?, ?);";
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update((Connection conn) -> {
@@ -65,6 +67,7 @@ public class MastermindDatabaseDao implements MastermindDao {
             statement.setString(1, round.getGuess());
             statement.setString(2, round.getMatches());
             statement.setInt(3, round.getGameId());
+            statement.setTimestamp(4, Timestamp.valueOf(round.getTimeOfPlay()));
             return statement;
         }, keyHolder);
 
@@ -76,20 +79,19 @@ public class MastermindDatabaseDao implements MastermindDao {
     @Override
     public List<Game> getAllGames() {
 
-        final String sql = "SELECT gameId, board, isComplete FROM game";
+        final String sql = "SELECT * FROM game";
         return jdbcTemplate.query(sql, new GameMapper());
 
     }
 
     @Override
     public Game game(int gameId) {
-        final String sql = "SELECT gameId, board, isComplete FROM game WHERE gameId = ?";
+        final String sql = "SELECT * FROM game WHERE gameId = ?";
         Game returnedGame = null;
         
         try {
              returnedGame = jdbcTemplate.queryForObject(sql, new GameMapper(), gameId);
         } catch (DataAccessException e) {
-            System.out.println("That wasn't a valid game number. Please try again.");
             return null;
         }
         
@@ -107,7 +109,7 @@ public class MastermindDatabaseDao implements MastermindDao {
     @Override
     public List<Round> gameRounds(int gameId) {
 
-        final String sql = "SELECT roundId, guess, matches, gameId FROM round WHERE gameId = ?";
+        final String sql = "SELECT * FROM round WHERE gameId = ?";
         return jdbcTemplate.query(sql, new RoundMapper(), gameId);
 
     }
@@ -133,6 +135,7 @@ public class MastermindDatabaseDao implements MastermindDao {
             r.setGuess(rs.getString("guess"));
             r.setMatches(rs.getString("matches"));
             r.setGameId(rs.getInt("gameId"));
+            r.setTimeOfPlay(rs.getTimestamp("timeOfPlay").toLocalDateTime());
             return r;
         }
     }

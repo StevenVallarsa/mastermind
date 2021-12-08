@@ -72,7 +72,7 @@ public class MastermindServiceLayerImpl implements MastermindServiceLayer {
         
         // check to see if player chose an already finished game
         // and end play before called DAO
-        if (game.getBoard() == "----") {
+        if (game == null) {
             System.out.println("That game doesn't exist. Please select a valid game.");
             return null;
         } else if (game.getIsComplete()) {
@@ -102,6 +102,7 @@ public class MastermindServiceLayerImpl implements MastermindServiceLayer {
         }
         
         round.setMatches("e:" + exactMatches + ":p" + partialMatches);
+        round.setTimeOfPlay(LocalDateTime.now());
         dao.guess(round);
         
         if (exactMatches == 4) {
@@ -140,17 +141,7 @@ public class MastermindServiceLayerImpl implements MastermindServiceLayer {
     @Override
     public Game getSpecificGame(int gameId) {
         Game selectedGame = dao.game(gameId);
-        if (selectedGame == null) {
-            Game deadGame = new Game();
-            deadGame = new Game();
-            deadGame.setGameId(gameId);
-            deadGame.setBoard("NOT A VALID GAME NUMBER");
-            deadGame.setIsComplete(false);
-            return deadGame;
-        }
-        if (!selectedGame.getIsComplete()) {
-            selectedGame.setBoard("GAME BOARD HIDDEN UNTIL GAME IS WON");
-        }
+
         return selectedGame;
     }
 

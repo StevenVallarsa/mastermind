@@ -51,8 +51,12 @@ public class MastermindController {
     
     @PostMapping("/guess")
     @ResponseStatus(HttpStatus.CREATED)
-    public Round playRound(@RequestBody Round round) {
-        return service.playRound(round);
+    public ResponseEntity<Round> playRound(@RequestBody Round round) {
+        if (round == null) {
+            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(service.playRound(round));
     }
     
     @GetMapping("/game")
@@ -65,11 +69,12 @@ public class MastermindController {
         
         Game game = service.getSpecificGame(gameId);
         if (game == null) {
+            System.out.println("That game does not exist.");
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
-//        if (game.getIsComplete() == false) {
-//            game.setBoard("XXXX");
-//        }
+        if (game.getIsComplete() == false) {
+            game.setBoard("GAME BOARD HIDDEN UNTIL GAME IS OVER");
+        }
         return ResponseEntity.ok(game);
     }
     

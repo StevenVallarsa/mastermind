@@ -68,9 +68,9 @@ public class MastermindController {
     public ResponseEntity<Game> getGame(@PathVariable int gameId) {
         
         Game game = service.getSpecificGame(gameId);
-        if (game == null) {
+        if (game.getBoard().length() != 4) {
             System.out.println("That game does not exist.");
-            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity(game, HttpStatus.NOT_FOUND);
         }
         if (game.getIsComplete() == false) {
             game.setBoard("GAME BOARD HIDDEN UNTIL GAME IS OVER");

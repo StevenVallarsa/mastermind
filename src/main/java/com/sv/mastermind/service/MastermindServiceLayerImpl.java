@@ -72,18 +72,34 @@ public class MastermindServiceLayerImpl implements MastermindServiceLayer {
         
         // check to see if player chose an already finished game
         // and end play before called DAO
-        if (game == null) {
-            System.out.println("That game doesn't exist. Please select a valid game.");
-            return null;
-        } else if (game.getIsComplete()) {
+//        if (game == null) {
+//            System.out.println("That game doesn't exist. Please select a valid game.");
+//            
+//            return null;
+        if (game.getIsComplete() && game.getBoard().length() == 4) {
             System.out.println("That game is already complete. Please try a different game or start a new one.");
-            return null;
+            Round deadRound = new Round();
+            deadRound.setGameId(gameId);
+            deadRound.setGuess("THAT GAME IS ALREADY COMPLETE. PLEASE TRY A DIFFERENT GAME OR START A NEW ONE.");
+            return deadRound;
+        } else if (game.getBoard().length() != 4) {
+            System.out.println("That game doesn't exist. Please try a different game number.");
+            Round deadRound = new Round();
+            deadRound.setGameId(gameId);
+            deadRound.setGuess("THAT GAME DOESN'T EXIST. PLEASE TRY A DIFFERENT GAME NUMBER.");
+            return deadRound;
+            
         }
         
         String guess = round.getGuess();
         if (!guess.matches("^(?!.*(.).*\\1)\\d{4}$")) {
             System.out.println("\"" + guess  + "\" is not a valid entry. You must enter four unique numbers from 0-9.");
-            return null;
+            Round deadRound = new Round();
+            deadRound.setGameId(gameId);
+            deadRound.setGuess("'" + guess  + "' is not a valid entry. You must enter four unique numbers from 0-9.");
+            return deadRound;
+            
+//            return null;
         }
         
         String board = game.getBoard();
@@ -109,6 +125,7 @@ public class MastermindServiceLayerImpl implements MastermindServiceLayer {
             dao.endGame(gameId);
             int numberOfRoundsToWin = dao.gameRounds(gameId).size();
             System.out.println("Congratulations! You have completed game " + String.valueOf(gameId) + " in " + numberOfRoundsToWin + " rounds.");
+            round.setMatches("Congratulations! You have completed game " + String.valueOf(gameId) + " in " + numberOfRoundsToWin + " rounds.");
 
         }
         
@@ -141,6 +158,15 @@ public class MastermindServiceLayerImpl implements MastermindServiceLayer {
     @Override
     public Game getSpecificGame(int gameId) {
         Game selectedGame = dao.game(gameId);
+        
+        if (selectedGame.getBoard().length() != 4) {
+            Game nullGame = new Game();
+            nullGame.setGameId(gameId);
+            nullGame.setBoard("THAT GAME NUMBER DOESN'T EXIST. PLEASE TRY AGAIN.");
+            nullGame.setIsComplete(true);
+            
+            return nullGame;
+        }
 
         return selectedGame;
     }

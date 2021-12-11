@@ -87,12 +87,12 @@ public class MastermindDatabaseDao implements MastermindDao {
     @Override
     public Game game(int gameId) {
         final String sql = "SELECT * FROM game WHERE gameId = ?";
-        Game returnedGame = null;
+        Game returnedGame = new Game();
         
         try {
              returnedGame = jdbcTemplate.queryForObject(sql, new GameMapper(), gameId);
         } catch (DataAccessException e) {
-            return null;
+            returnedGame.setBoard("That game doesn't exist.");
         }
         
         return returnedGame;
@@ -109,7 +109,7 @@ public class MastermindDatabaseDao implements MastermindDao {
     @Override
     public List<Round> gameRounds(int gameId) {
 
-        final String sql = "SELECT * FROM round WHERE gameId = ?";
+        final String sql = "SELECT * FROM round WHERE gameId = ? ORDER BY roundId DESC";
         return jdbcTemplate.query(sql, new RoundMapper(), gameId);
 
     }
@@ -122,6 +122,7 @@ public class MastermindDatabaseDao implements MastermindDao {
             g.setGameId(rs.getInt("gameId"));
             g.setBoard(rs.getString("board"));
             g.setIsComplete(rs.getBoolean("isComplete"));
+            g.setInfo(rs.getString("info"));
             return g;
         }
     }

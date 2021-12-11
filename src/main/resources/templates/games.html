@@ -10,33 +10,44 @@
 
     <title>MasterBrain Games List</title>
   </head>
-  <body>
+    <body style="margin: 0; padding: 0;" class="bg-info">
     <!-- Main Body of Page -->
-    <div class="container">
-        <div class="row m-4">
-            <div class="col text-center border border-dark">
-                <h1>Games</h1>
+    
+    <div class="container-fluid">
+        <div class="row sticky-top">
+            <div class="col text-center bg-info text-white">
+                <h1 class="display-1">Masterbrain</h1>
             </div>
-                <div class="col text-center m-3">
+        </div>
+
+        <div class="row bg-white">
+            <div class="col text-center">
+                <a href="/playgame?id=0" style="font-size: 24pt;" type="button" class="btn btn-outline-dark p-2 m-3">New Game</a>
+                <a href="games" style="font-size: 24pt;" type="button" class="btn btn-outline-dark p-2 m-3">List Games</a>
+            </div>
+        </div>
+
+        <div class="row m-4">
+            <div class="col offset-2 col-8 text-center bg-white">
+                <h1 class="display-3">Games</h1>
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Game#</th>
-                                <th>Board</th>
-                                <th>Completed?</th>
+                                <th>Solution</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="game : ${games}">
                                 <td th:text="${game.gameId}">Game ID</td>
-                                <td th:text="${game.board}">Board</td>
-                                <td th:text="${game.isComplete}">Completed?</td>
-                                <td>Edit</td>
-                                <td>Delete</td>
-                            </tr>
+                                <td th:if=${!game.isComplete}><a href="#" th:href="@{/playgame(id=${game.gameId})}">Continue?</a></td>
+                                <td th:if=${game.isComplete} th:text="${game.board}">Board</td>
+                                <td style="text-align: left;" th:text="${game.info}">Game Info</td>
+                             </tr>
                         </tbody>
                     </table>
-                </div>
+            </div>
 
         </div>
        

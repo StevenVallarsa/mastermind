@@ -98,8 +98,6 @@ public class MastermindServiceLayerImpl implements MastermindServiceLayer {
             deadRound.setGameId(gameId);
             deadRound.setGuess("'" + guess  + "' is not a valid entry. You must enter four unique numbers from 0-9.");
             return deadRound;
-            
-//            return null;
         }
         
         String board = game.getBoard();
